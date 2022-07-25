@@ -1,14 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { GlobalInitialStateType } from './types';
 
-const initialState = {};
+const initialState: GlobalInitialStateType = {
+  isStarted: false,
+};
 
 const globalSlice = createSlice({
   name: 'global',
   initialState,
   reducers: {
-    testFunc(state, { payload }) {},
+    startGame(state) {
+      state.isStarted = true;
+    },
   },
 });
 
-export const { testFunc } = globalSlice.actions;
+export const { startGame } = globalSlice.actions;
 export default globalSlice.reducer;
