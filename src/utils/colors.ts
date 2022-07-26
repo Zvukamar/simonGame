@@ -6,4 +6,5 @@ export default {
   BLACK: 'black',
   GRAY: 'gray',
   YELLOW: 'yellow',
+  PURPLE: 'purple',
 };

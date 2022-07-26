@@ -3,6 +3,8 @@ import { GlobalInitialStateType } from './types';
 
 const initialState: GlobalInitialStateType = {
   isStarted: false,
+  currentScore: 0,
+  scores: [],
 };
 
 const globalSlice = createSlice({
@@ -12,8 +14,11 @@ const globalSlice = createSlice({
     startGame(state) {
       state.isStarted = true;
     },
+    addCurrentScore(state) {
+      state.currentScore++;
+    },
   },
 });
 
-export const { startGame } = globalSlice.actions;
+export const { addCurrentScore, startGame } = globalSlice.actions;
 export default globalSlice.reducer;

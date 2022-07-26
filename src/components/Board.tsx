@@ -1,5 +1,7 @@
 import React, { createRef, FC, RefObject, useEffect, useRef, useState } from 'react';
 import { ColorValue, StyleSheet, View } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addCurrentScore } from '../store/globalSlice';
 import { colors, constants } from '../utils';
 import ColoredButton, { RefProps } from './ColoredButton';
 
@@ -7,9 +9,10 @@ interface BoardProps {
     isGameStarted: boolean;
 }
 
-const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors.GRAY];
+const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors.PURPLE];
 
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
+    const dispatch = useDispatch();
     const [isPlayingSequance, setIsPlayingSequance] = useState(false);
     const [levels, setLevels] = useState<number[]>([]);
     const [userInput, setUserInput] = useState<number[]>([]);
@@ -48,6 +51,7 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
             if (currentIndex === levels.length - 1) {
                 addNewLevel();
                 setUserInput([]);
+                dispatch(addCurrentScore());
             }
         } else {
             console.log('game over modal');
@@ -67,7 +71,6 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
                 />
             ))}
         </View>
-
     )
 }
 

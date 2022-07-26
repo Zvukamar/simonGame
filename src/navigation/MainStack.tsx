@@ -7,7 +7,7 @@ const Stack = createNativeStackNavigator();
 
 const MainStack = () => {
     return (
-        <Stack.Navigator>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen
                 name={MAIN_STACK_ROUTES.GAME_SCREEN}
                 component={GameScreen}

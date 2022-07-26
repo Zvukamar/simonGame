@@ -2,7 +2,8 @@ import React from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import Board from '../components/Board';
-import { isGameStartedSelector } from '../store/globalSelectors';
+import HeaderText from '../components/HeaderText';
+import { getCurrentScoreSelector, isGameStartedSelector } from '../store/globalSelectors';
 import { startGame } from '../store/globalSlice';
 import { colors } from '../utils';
 
@@ -10,10 +11,20 @@ const GameScreen = () => {
     const dispatch = useDispatch();
     const isGameStarted = useSelector(isGameStartedSelector);
     const handleStartGame = () => dispatch(startGame());
+    const currentScore = useSelector(getCurrentScoreSelector);
+
     return (
         <View style={styles.container}>
+            <HeaderText text={`Score: ${currentScore}`} />
             <Board isGameStarted={isGameStarted} />
-            {!isGameStarted && <Button onPress={handleStartGame} title='Start Game' />}
+            {!isGameStarted && (
+                <View style={styles.buttonContainer}>
+                    <Button
+                        onPress={handleStartGame}
+                        title='Start Game'
+                    />
+                </View>
+            )}
         </View>
     );
 }
@@ -26,5 +37,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.WHITE,
         alignItems: 'center',
         justifyContent: 'center'
+    },
+    buttonContainer: {
+        marginVertical: 10
     }
 })
