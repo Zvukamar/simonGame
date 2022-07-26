@@ -10,6 +10,7 @@ interface BoardProps {
 const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors.GRAY];
 
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
+    const [isPlayingSequance, setIsPlayingSequance] = useState(false);
     const [levels, setLevels] = useState<number[]>([]);
     const [userInput, setUserInput] = useState<number[]>([]);
     const boxRefs = useRef<RefObject<RefProps>[]>([]);
@@ -26,8 +27,12 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
 
     useEffect(() => {
         levels.forEach((level, index) => {
+            setIsPlayingSequance(true);
             setTimeout(() => {
                 boxRefs.current[level].current?.startAnimation();
+                if (index === levels.length - 1) {
+                    setIsPlayingSequance(false);
+                }
             }, index * 2 * constants.ANIMATION_DURATION);
         });
     }, [levels.length])
@@ -55,7 +60,7 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
         <View style={styles.container}>
             {colorSquare.map((color, index) => (
                 <ColoredButton
-                    disabled={!isGameStarted}
+                    disabled={!isGameStarted || isPlayingSequance}
                     key={color.toString()}
                     ref={boxRefs.current[index]}
                     color={color}
