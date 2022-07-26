@@ -16,9 +16,7 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const boxRefs = useRef<RefObject<RefProps>[]>([]);
 
     useEffect(() => {
-        colorSquare.forEach((_, index) => {
-            boxRefs.current[index] = createRef();
-        });
+        colorSquare.forEach((_, index) => boxRefs.current[index] = createRef());
     }, []);
 
     useEffect(() => {
