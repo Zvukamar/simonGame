@@ -6,6 +6,7 @@ import { constants } from '../utils';
 interface ColoredButtonProps {
     color: ColorValue;
     index: number;
+    disabled: boolean;
     onPress: (index: number) => void;
 }
 
@@ -15,7 +16,7 @@ export interface RefProps {
 
 const { INITIAL_OPACITY_VALUE, FINAL_OPACITY_VALUE, ANIMATION_DURATION } = constants;
 
-const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress }, ref) => {
+const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress, disabled }, ref) => {
     const opacity = useSharedValue(INITIAL_OPACITY_VALUE);
     const animatedStyles = useAnimatedStyle(() => ({ opacity: opacity.value }));
     const handleOnPress = () => onPress(index);
@@ -32,6 +33,7 @@ const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, i
     return (
         <Animated.View style={animatedStyles}>
             <TouchableOpacity
+                disabled={disabled}
                 onPress={handleOnPress}
                 style={[styles.container, { backgroundColor: color }]}
             />

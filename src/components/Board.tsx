@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { createRef, FC, RefObject, useEffect, useRef, useState } from 'react';
 import { ColorValue, StyleSheet, View } from 'react-native';
 import { colors, constants } from '../utils';
 import ColoredButton, { RefProps } from './ColoredButton';
@@ -12,22 +12,28 @@ const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const [levels, setLevels] = useState<number[]>([]);
     const [userInput, setUserInput] = useState<number[]>([]);
-    const boxRefs = colorSquare.map(_ => useRef<RefProps>(null));
+    const boxRefs = useRef<RefObject<RefProps>[]>([]);
 
     useEffect(() => {
-        addNewLevel();
+        colorSquare.forEach((_, index) => {
+            boxRefs.current[index] = createRef();
+        });
     }, []);
+
+    useEffect(() => {
+        isGameStarted && addNewLevel();
+    }, [isGameStarted]);
 
     useEffect(() => {
         levels.forEach((level, index) => {
             setTimeout(() => {
-                boxRefs[level].current?.startAnimation()
+                boxRefs.current[level].current?.startAnimation();
             }, index * 2 * constants.ANIMATION_DURATION);
         });
     }, [levels.length])
 
     const addNewLevel = () => {
-        const newLevel = Math.floor((Math.random() * colorSquare.length));
+        const newLevel = Math.floor((Math.random() * 100 % colorSquare.length));
         setLevels([...levels, newLevel]);
     }
 
@@ -49,8 +55,9 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
         <View style={styles.container}>
             {colorSquare.map((color, index) => (
                 <ColoredButton
+                    disabled={!isGameStarted}
                     key={color.toString()}
-                    ref={boxRefs[index]}
+                    ref={boxRefs.current[index]}
                     color={color}
                     index={index}
                     onPress={handleUserInput}
