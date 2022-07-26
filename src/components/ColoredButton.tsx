@@ -1,16 +1,43 @@
-import React, { FC } from 'react';
+import React, { useImperativeHandle } from 'react';
 import { TouchableOpacity, ColorValue, StyleSheet } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { constants } from '../utils';
 
 interface ColoredButtonProps {
     color: ColorValue;
+    index: number;
+    onPress: (index: number) => void;
 }
 
-const ColoredButton: FC<ColoredButtonProps> = ({ color }) => {
-    return (
-        <TouchableOpacity style={[styles.container, { backgroundColor: color }]} />
-    )
+export interface RefProps {
+    startAnimation: () => void;
 }
+
+const { INITIAL_OPACITY_VALUE, FINAL_OPACITY_VALUE, ANIMATION_DURATION } = constants;
+
+const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress }, ref) => {
+    const opacity = useSharedValue(INITIAL_OPACITY_VALUE);
+    const animatedStyles = useAnimatedStyle(() => ({ opacity: opacity.value }));
+    const handleOnPress = () => onPress(index);
+
+    useImperativeHandle(ref, () => ({
+        startAnimation() {
+            opacity.value = withSequence(
+                opacity.value = withTiming(FINAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
+                opacity.value = withTiming(INITIAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
+            );
+        }
+    }));
+
+    return (
+        <Animated.View style={animatedStyles}>
+            <TouchableOpacity
+                onPress={handleOnPress}
+                style={[styles.container, { backgroundColor: color }]}
+            />
+        </Animated.View>
+    )
+})
 
 export default ColoredButton;
 
