@@ -1,5 +1,6 @@
-import React, { useImperativeHandle } from 'react';
+import React, { useImperativeHandle, useRef } from 'react';
 import { TouchableOpacity, ColorValue, StyleSheet } from 'react-native';
+import Sound from 'react-native-sound';
 import Animated, { useAnimatedStyle, useSharedValue, withSequence, withTiming } from 'react-native-reanimated';
 import { constants } from '../utils';
 
@@ -8,6 +9,7 @@ interface ColoredButtonProps {
     index: number;
     disabled: boolean;
     onPress: (index: number) => void;
+    soundPath?: string;
 }
 
 export interface RefProps {
@@ -16,16 +18,22 @@ export interface RefProps {
 
 const { INITIAL_OPACITY_VALUE, FINAL_OPACITY_VALUE, ANIMATION_DURATION } = constants;
 
-const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress, disabled }, ref) => {
+const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress, disabled, soundPath }, ref) => {
+    const soundRef = useRef(new Sound(soundPath, Sound.MAIN_BUNDLE));
     const opacity = useSharedValue(INITIAL_OPACITY_VALUE);
     const animatedStyles = useAnimatedStyle(() => ({ opacity: opacity.value }));
-    const handleOnPress = () => onPress(index);
+
+    const handleOnPress = () => {
+        soundRef.current.play();
+        onPress(index);
+    }
 
     useImperativeHandle(ref, () => ({
         startAnimation() {
+            soundRef.current.play();
             opacity.value = withSequence(
-                opacity.value = withTiming(FINAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
-                opacity.value = withTiming(INITIAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
+                withTiming(FINAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
+                withTiming(INITIAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
             );
         }
     }));

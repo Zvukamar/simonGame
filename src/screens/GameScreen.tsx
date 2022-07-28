@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useSelector } from 'react-redux';
-import Board from '../components/Board';
+import { Board } from '../components/Board';
 import GameMenu from '../components/GameMenu';
 import HeaderText from '../components/HeaderText';
 import { getCurrentScoreSelector, isGameStartedSelector } from '../store/globalSelectors';

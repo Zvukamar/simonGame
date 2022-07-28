@@ -1,17 +1,13 @@
 import React, { createRef, FC, RefObject, useEffect, useRef, useState } from 'react';
-import { ColorValue, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
-import { MAIN_STACK_ROUTES } from '../navigation/routes';
-import { addCurrentScore } from '../store/globalSlice';
-import { colors, constants } from '../utils';
-import ColoredButton, { RefProps } from './ColoredButton';
-
-interface BoardProps {
-    isGameStarted: boolean;
-}
-
-const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors.PURPLE];
+import { constants } from '../../utils';
+import ColoredButton, { RefProps } from '../ColoredButton';
+import { addCurrentScore } from '../../store/globalSlice';
+import { MAIN_STACK_ROUTES } from '../../navigation/routes';
+import { BoardProps } from './Board.types';
+import { squaresData } from './Board.logic';
 
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const dispatch = useDispatch();
@@ -22,7 +18,7 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const boxRefs = useRef<RefObject<RefProps>[]>([]);
 
     useEffect(() => {
-        colorSquare.forEach((_, index) => boxRefs.current[index] = createRef());
+        squaresData.forEach((_, index) => boxRefs.current[index] = createRef());
     }, []);
 
     useEffect(() => {
@@ -44,7 +40,7 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
     }, [levels.length])
 
     const addNewLevel = () => {
-        const newLevel = Math.floor((Math.random() * 100 % colorSquare.length));
+        const newLevel = Math.floor((Math.random() * 100 % squaresData.length));
         setLevels([...levels, newLevel]);
     }
 
@@ -69,14 +65,15 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
 
     return (
         <View style={styles.container}>
-            {colorSquare.map((color, index) => (
+            {squaresData.map((square, index) => (
                 <ColoredButton
                     disabled={!isGameStarted || isPlayingSequance}
-                    key={color.toString()}
+                    key={square.color.toString()}
                     ref={boxRefs.current[index]}
-                    color={color}
+                    color={square.color}
                     index={index}
                     onPress={handleUserInput}
+                    soundPath={square.sound}
                 />
             ))}
         </View>
