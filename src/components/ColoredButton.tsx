@@ -33,6 +33,7 @@ const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, i
     return (
         <Animated.View style={animatedStyles}>
             <TouchableOpacity
+                activeOpacity={0.4}
                 disabled={disabled}
                 onPress={handleOnPress}
                 style={[styles.container, { backgroundColor: color }]}

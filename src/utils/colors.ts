@@ -7,4 +7,6 @@ export default {
   GRAY: 'gray',
   YELLOW: 'yellow',
   PURPLE: 'purple',
+  PINK: 'pink',
+  SKY: 'lightblue',
 };
