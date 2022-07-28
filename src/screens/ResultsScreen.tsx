@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { Button, StyleSheet, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import GameOverModal from '../components/GameOverModal';
 import HeaderText from '../components/HeaderText';
+import HighScoreBoard from '../components/HighScoreBoard';
 import { StackScreenProps } from '../navigation/types';
-import { getCurrentScoreSelector, getScoreTableSelector } from '../store/globalSelectors';
+import { getCurrentScoreSelector } from '../store/globalSelectors';
 import { resetGame } from '../store/globalSlice';
 import { colors } from '../utils';
 
@@ -14,7 +15,6 @@ const ResultsScreen = ({ navigation, route }: StackScreenProps) => {
     const [isModalVisible, setIsModalVisible] = useState(!!showModal);
 
     const currentScore = useSelector(getCurrentScoreSelector);
-    const scoreTable = useSelector(getScoreTableSelector);
 
     const startAgain = () => {
         dispatch(resetGame());
@@ -30,22 +30,7 @@ const ResultsScreen = ({ navigation, route }: StackScreenProps) => {
                     customTextStyle={styles.customHeaderTitle}
                     text='Best Score Table'
                 />
-                <View style={styles.scoreBoardContainer}>
-                    <View style={styles.scoreBoardHeader}>
-                        <Text>Rank</Text>
-                        <Text>Name</Text>
-                        <Text>Score</Text>
-                    </View>
-                    <ScrollView style={styles.scoreBoardScrollview}>
-                        {scoreTable.slice(0, 10).map((userScore, index) => (
-                            <View key={userScore.gameId} style={styles.scoreBoardRow}>
-                                <Text style={styles.scoreBoardText}>{index + 1}</Text>
-                                <Text style={styles.scoreBoardText}>{userScore.name}</Text>
-                                <Text style={styles.scoreBoardText}>{userScore.score}</Text>
-                            </View>
-                        ))}
-                    </ScrollView>
-                </View>
+                <HighScoreBoard />
             </View>
             <View style={styles.buttonContainer}>
                 <Button
@@ -72,30 +57,6 @@ const styles = StyleSheet.create({
     },
     topContainer: {
         justifyContent: 'center'
-    },
-    scoreBoardContainer: {
-        height: 400
-    },
-    scoreBoardHeader: {
-        borderWidth: 1,
-        paddingVertical: 8,
-        flexDirection: 'row',
-        backgroundColor: colors.RED,
-        justifyContent: 'space-around'
-    },
-    scoreBoardScrollview: {
-        borderWidth: 1,
-        backgroundColor: colors.PINK
-    },
-    scoreBoardRow: {
-        flex: 1,
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-        marginVertical: 8
-    },
-    scoreBoardText: {
-        flex: 1,
-        textAlign: 'center'
     },
     buttonContainer: {
         marginVertical: 16
