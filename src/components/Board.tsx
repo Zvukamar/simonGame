@@ -1,6 +1,8 @@
 import React, { createRef, FC, RefObject, useEffect, useRef, useState } from 'react';
 import { ColorValue, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { MAIN_STACK_ROUTES } from '../navigation/routes';
 import { addCurrentScore } from '../store/globalSlice';
 import { colors, constants } from '../utils';
 import ColoredButton, { RefProps } from './ColoredButton';
@@ -13,6 +15,7 @@ const colorSquare: ColorValue[] = [colors.RED, colors.GREEN, colors.BLUE, colors
 
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const dispatch = useDispatch();
+    const navigation = useNavigation();
     const [isPlayingSequance, setIsPlayingSequance] = useState(false);
     const [levels, setLevels] = useState<number[]>([]);
     const [userInput, setUserInput] = useState<number[]>([]);
@@ -32,7 +35,9 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
             setTimeout(() => {
                 boxRefs.current[level].current?.startAnimation();
                 if (index === levels.length - 1) {
-                    setIsPlayingSequance(false);
+                    setTimeout(() => {
+                        setIsPlayingSequance(false);
+                    }, 1000);
                 }
             }, index * 2 * constants.ANIMATION_DURATION);
         });
@@ -49,12 +54,16 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
         if (levels[currentIndex] === newUserInputState[currentIndex]) {
             setUserInput(newUserInputState);
             if (currentIndex === levels.length - 1) {
-                addNewLevel();
-                setUserInput([]);
-                dispatch(addCurrentScore());
+                setTimeout(() => {
+                    addNewLevel();
+                    setUserInput([]);
+                    dispatch(addCurrentScore());
+                }, 500);
             }
         } else {
-            console.log('game over modal');
+            setUserInput([]);
+            setLevels([]);
+            navigation.navigate(MAIN_STACK_ROUTES.RESULT_SCREEN, { showModal: true });
         }
     }
 

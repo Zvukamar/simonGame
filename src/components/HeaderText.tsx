@@ -1,13 +1,14 @@
 import React, { FC } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleProp, StyleSheet, Text, TextStyle, View } from 'react-native';
 
 interface HeaderTextProps {
     text: string;
+    customTextStyle?: StyleProp<TextStyle>;
 }
-const HeaderText: FC<HeaderTextProps> = ({ text }) => {
+const HeaderText: FC<HeaderTextProps> = ({ text, customTextStyle }) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{text}</Text>
+            <Text style={[styles.text, customTextStyle]}>{text}</Text>
         </View>
     )
 }
@@ -20,6 +21,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 18,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
     }
 })
