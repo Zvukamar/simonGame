@@ -27,19 +27,19 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
 
     useEffect(() => {
         levels.forEach((level, index) => {
-            setIsPlayingSequance(true);
             setTimeout(() => {
                 boxRefs.current[level].current?.startAnimation();
                 if (index === levels.length - 1) {
                     setTimeout(() => {
                         setIsPlayingSequance(false);
-                    }, 1000);
+                    }, 1200);
                 }
             }, index * 2 * constants.ANIMATION_DURATION);
         });
     }, [levels.length])
 
     const addNewLevel = () => {
+        setIsPlayingSequance(true);
         const newLevel = Math.floor((Math.random() * 100 % squaresData.length));
         setLevels([...levels, newLevel]);
     }

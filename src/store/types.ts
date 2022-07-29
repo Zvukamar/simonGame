@@ -5,12 +5,15 @@ export type RootState = ReturnType<typeof store.getState>;
 export interface GlobalInitialStateType {
   isStarted: boolean;
   currentScore: number;
-  scores: ResultType[];
   modalVisible: boolean;
+}
+
+export interface PersistInitialStateType {
+  highScoresDB: ResultType[];
 }
 
 interface ResultType {
   gameId: string;
-  name: string;
-  score: number;
+  playerName: string;
+  playerScore: number;
 }

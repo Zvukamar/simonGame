@@ -5,5 +5,3 @@ export const isGameStartedSelector = (state: RootState) =>
 
 export const getCurrentScoreSelector = (state: RootState) =>
   state.global.currentScore;
-
-export const getScoreTableSelector = (state: RootState) => state.global.scores;

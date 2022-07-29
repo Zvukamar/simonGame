@@ -2,6 +2,7 @@ import React, { FC, useState } from 'react';
 import { Alert, Button, Modal, SafeAreaView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { gameOver } from '../store/globalSlice';
+import { addNewRecord } from '../store/persistSlice';
 import { colors } from '../utils';
 
 interface GameOverModalProps {
@@ -18,7 +19,8 @@ const GameOverModal: FC<GameOverModalProps> = ({ currentScore, isVisible, onClos
             return Alert.alert('Player name cannot be empty!');
         }
         onClose();
-        dispatch(gameOver({ name: playerName, score: currentScore }))
+        dispatch(gameOver())
+        dispatch(addNewRecord({ name: playerName, score: currentScore }))
     }
     return (
         <Modal transparent animationType='slide' visible={isVisible}>
