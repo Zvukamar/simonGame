@@ -56,6 +56,8 @@ const styles = StyleSheet.create({
     container: {
         height: constants.COLORED_BUTTON_SIZE,
         width: constants.COLORED_BUTTON_SIZE,
-        borderWidth: 1
+        borderWidth: 1,
+        borderRadius: 15,
+        margin: constants.MARGIN_OF_SQUARE
     }
 });

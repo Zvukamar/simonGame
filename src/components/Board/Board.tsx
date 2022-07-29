@@ -86,6 +86,6 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         flexWrap: 'wrap',
-        width: constants.COLORED_BUTTON_SIZE * constants.AMOUNT_OF_COLUMNS,
+        width: (constants.COLORED_BUTTON_SIZE + (2 * constants.MARGIN_OF_SQUARE)) * constants.AMOUNT_OF_COLUMNS,
     }
 })
