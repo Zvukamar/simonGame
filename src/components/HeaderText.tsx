@@ -5,6 +5,7 @@ interface HeaderTextProps {
     text: string;
     customTextStyle?: StyleProp<TextStyle>;
 }
+
 const HeaderText: FC<HeaderTextProps> = ({ text, customTextStyle }) => {
     return (
         <View style={styles.container}>

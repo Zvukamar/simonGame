@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { FC } from 'react';
 import { Button, StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { MAIN_STACK_ROUTES } from '../navigation/routes';
+import { navigateToResultScreen } from '../navigation/actions';
 import { startGame } from '../store/globalSlice';
 
 interface GameMenuProps {
@@ -13,7 +13,7 @@ const GameMenu: FC<GameMenuProps> = ({ isGameStarted }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
     const handleStartGame = () => dispatch(startGame());
-    const navigateToHighScore = () => navigation.navigate(MAIN_STACK_ROUTES.RESULT_SCREEN);
+    const navigateToHighScore = () => navigation.dispatch(navigateToResultScreen());
     if (isGameStarted) return null;
     return (
         <View style={styles.buttonContainer}>

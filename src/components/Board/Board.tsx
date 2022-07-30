@@ -5,14 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { constants } from '../../utils';
 import ColoredButton, { RefProps } from '../ColoredButton';
 import { addCurrentScore } from '../../store/globalSlice';
-import { MAIN_STACK_ROUTES } from '../../navigation/routes';
 import { BoardProps } from './Board.types';
-import { squaresData } from './Board.logic';
+import { getRandomNumber, squaresData } from './Board.logic';
+import { navigateToResultScreen } from '../../navigation/actions';
 
 const Board: FC<BoardProps> = ({ isGameStarted }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const [isPlayingSequance, setIsPlayingSequance] = useState(false);
+    const [isPlayingSequance, setIsPlayingSequance] = useState(true);
     const [levels, setLevels] = useState<number[]>([]);
     const [userInput, setUserInput] = useState<number[]>([]);
     const boxRefs = useRef<RefObject<RefProps>[]>([]);
@@ -30,18 +30,27 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
             setTimeout(() => {
                 boxRefs.current[level].current?.startAnimation();
                 if (index === levels.length - 1) {
-                    setTimeout(() => {
-                        setIsPlayingSequance(false);
-                    }, 1200);
+                    setTimeout(() => setIsPlayingSequance(false), constants.LAST_SQUARE_ANIMATOIN_DELAY);
                 }
             }, index * 2 * constants.ANIMATION_DURATION);
         });
     }, [levels.length])
 
     const addNewLevel = () => {
-        setIsPlayingSequance(true);
-        const newLevel = Math.floor((Math.random() * 100 % squaresData.length));
+        const newLevel = getRandomNumber();
         setLevels([...levels, newLevel]);
+    }
+
+    const handleWrongUserInput = () => {
+        setUserInput([]);
+        setLevels([]);
+        navigation.dispatch(navigateToResultScreen({ showModal: true }))
+    }
+
+    const renderNextLevel = () => {
+        addNewLevel();
+        setUserInput([]);
+        dispatch(addCurrentScore());
     }
 
     const handleUserInput = (userChoiseIndex: number) => {
@@ -50,16 +59,11 @@ const Board: FC<BoardProps> = ({ isGameStarted }) => {
         if (levels[currentIndex] === newUserInputState[currentIndex]) {
             setUserInput(newUserInputState);
             if (currentIndex === levels.length - 1) {
-                setTimeout(() => {
-                    addNewLevel();
-                    setUserInput([]);
-                    dispatch(addCurrentScore());
-                }, 500);
+                setIsPlayingSequance(true);
+                setTimeout(() => renderNextLevel(), constants.LAST_SQUARE_ANIMATOIN_DELAY);
             }
         } else {
-            setUserInput([]);
-            setLevels([]);
-            navigation.navigate(MAIN_STACK_ROUTES.RESULT_SCREEN, { showModal: true });
+            handleWrongUserInput();
         }
     }
 

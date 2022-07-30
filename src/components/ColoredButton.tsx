@@ -16,7 +16,13 @@ export interface RefProps {
     startAnimation: () => void;
 }
 
-const { INITIAL_OPACITY_VALUE, FINAL_OPACITY_VALUE, ANIMATION_DURATION } = constants;
+const {
+    INITIAL_OPACITY_VALUE,
+    FINAL_OPACITY_VALUE,
+    ANIMATION_DURATION,
+    COLORED_BUTTON_SIZE,
+    MARGIN_OF_SQUARE
+} = constants;
 
 const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, index, onPress, disabled, soundPath }, ref) => {
     const soundRef = useRef(new Sound(soundPath, Sound.MAIN_BUNDLE));
@@ -32,8 +38,8 @@ const ColoredButton = React.forwardRef<RefProps, ColoredButtonProps>(({ color, i
         startAnimation() {
             soundRef.current.play();
             opacity.value = withSequence(
-                withTiming(FINAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
-                withTiming(INITIAL_OPACITY_VALUE, { duration: ANIMATION_DURATION }),
+                withTiming(FINAL_OPACITY_VALUE, { duration: ANIMATION_DURATION / 2 }),
+                withTiming(INITIAL_OPACITY_VALUE, { duration: ANIMATION_DURATION / 2 }),
             );
         }
     }));
@@ -54,10 +60,10 @@ export default ColoredButton;
 
 const styles = StyleSheet.create({
     container: {
-        height: constants.COLORED_BUTTON_SIZE,
-        width: constants.COLORED_BUTTON_SIZE,
+        height: COLORED_BUTTON_SIZE,
+        width: COLORED_BUTTON_SIZE,
         borderWidth: 1,
         borderRadius: 15,
-        margin: constants.MARGIN_OF_SQUARE
+        margin: MARGIN_OF_SQUARE
     }
 });

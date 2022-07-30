@@ -7,3 +7,6 @@ export const squaresData: SquareDataType[] = [
   { color: colors.BLUE, sound: 'sounds_blue.mp3' },
   { color: colors.PURPLE, sound: 'sounds_yellow.mp3' },
 ];
+
+export const getRandomNumber = () =>
+  Math.floor((Math.random() * 100) % squaresData.length);
